@@ -1,26 +1,59 @@
 -- Lab | SQL Queries 8
 
-use sakila;
+USE sakila;
 
 -- 1. Rank films by length (filter out the rows with nulls or zeros in length column). Select only columns title, length and rank in your output.
-select title, length, rank() over(order by length) as 'rank' 
-from film having length >= 1;
+SELECT 
+    title, 
+    length,
+    RANK() OVER(ORDER BY length) AS 'rank' 
+FROM
+    film
+HAVING length >= 1;
 
 -- 2. Rank films by length within the rating category (filter out the rows with nulls or zeros in length column). In your output, only select the columns title, length, rating and rank.
-select title, length, rating, rank() over(partition by rating order by length) as 'rank' 
-from film having length >= 1;
+SELECT 
+    title, 
+    length, 
+    rating, 
+    RANK() OVER(PARTITION BY rating ORDER BY length) AS 'rank' 
+FROM
+    film
+HAVING length >= 1;
 
 -- 3. How many films are there for each of the categories in the category table? Hint: Use appropriate join between the tables "category" and "film_category".
-select name as 'film category' , count(*) as 'films in this category' 
-from category inner join film_category on category.category_id = film_category.category_id group by name;
+SELECT 
+    name AS 'film category',
+    COUNT(*) AS 'films in this category'
+FROM
+    category
+        INNER JOIN
+    film_category ON category.category_id = film_category.category_id
+GROUP BY name;
 
 -- 4. Which actor has appeared in the most films? Hint: You can create a join between the tables "actor" and "film actor" and count the number of times an actor appears.
-select first_name, last_name, count(actor.actor_id) as 'movies participated in', rank() over(order by count(actor.actor_id) desc) as 'rank'
-from actor inner join film_actor on actor.actor_id = film_actor.actor_id group by actor.actor_id;
+SELECT 
+    first_name,
+    last_name,
+    COUNT(actor.actor_id) AS 'movies participated in',
+    RANK() OVER(ORDER BY count(actor.actor_id) DESC) AS 'rank'
+FROM
+    actor
+        INNER JOIN
+    film_actor ON actor.actor_id = film_actor.actor_id
+GROUP BY actor.actor_id;
 
 -- 5. Which is the most active customer (the customer that has rented the most number of films)?
 -- Hint: Use appropriate join between the tables "customer" and "rental" and count the rental_id for each customer.
-select customer.customer_id, count(rental_id) as 'number of rented movies' from customer inner join rental on customer.customer_id = rental.customer_id group by customer.customer_id order by count(rental_id) desc ;
+SELECT 
+    customer.customer_id,
+    COUNT(rental_id) AS 'number of rented movies'
+FROM
+    customer
+        INNER JOIN
+    rental ON customer.customer_id = rental.customer_id
+GROUP BY customer.customer_id
+ORDER BY COUNT(rental_id) DESC;
 
 
 -- Bonus: Which is the most rented film? (The answer is Bucket Brotherhood).

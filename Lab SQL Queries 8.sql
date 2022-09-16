@@ -24,7 +24,7 @@ HAVING length >= 1;
 -- 3. How many films are there for each of the categories in the category table? Hint: Use appropriate join between the tables "category" and "film_category".
 SELECT 
     name AS 'film category',
-    COUNT(*) AS 'films in this category'
+    COUNT(*) AS 'films'
 FROM
     category
         INNER JOIN
@@ -35,7 +35,7 @@ GROUP BY name;
 SELECT 
     first_name,
     last_name,
-    COUNT(actor.actor_id) AS 'movies participated in',
+    COUNT(actor.actor_id) AS 'participated in',
     RANK() OVER(ORDER BY count(actor.actor_id) DESC) AS 'rank'
 FROM
     actor
@@ -47,7 +47,7 @@ GROUP BY actor.actor_id;
 -- Hint: Use appropriate join between the tables "customer" and "rental" and count the rental_id for each customer.
 SELECT 
     customer.customer_id,
-    COUNT(rental_id) AS 'number of rented movies'
+    COUNT(rental_id) AS 'rented movies'
 FROM
     customer
         INNER JOIN
